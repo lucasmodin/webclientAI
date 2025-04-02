@@ -1,0 +1,58 @@
+package webclient.webclientai.controller;
+
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
+import webclient.webclientai.service.BlizzardAuthService;
+
+import java.io.IOException;
+import java.util.UUID;
+
+@RestController
+public class BlizzardAuthController {
+
+    private final String state = UUID.randomUUID().toString();
+
+    @Value("${blizzard.client.id}")
+    private String clientId;
+
+    @Value("${blizzard.redirect.uri}")
+    private String redirectUri;
+
+    @Value("${blizzard.scope}")
+    private String scope;
+
+    @Autowired
+    private BlizzardAuthService blizzardAuthService;
+
+    @GetMapping("/login")
+    public void login(HttpServletResponse response) throws IOException {
+        String authUrl = UriComponentsBuilder
+                .newInstance()
+                .scheme("https")
+                .host("oauth.battle.net")
+                .path("/authorize")
+                .queryParam("client_id", clientId)
+                .queryParam("redirect_uri", redirectUri)
+                .queryParam("response_type", "code")
+                .queryParam("scope", scope)
+                .queryParam("state", state)
+                .build()
+                .toUriString();
+        response.sendRedirect(authUrl);
+        System.out.println("Login redirected to " + authUrl);
+    }
+
+    @GetMapping("/callback")
+        public ResponseEntity<String> callback(@RequestParam("code") String code) {
+            String accessToken = blizzardAuthService.exchangeCodeForToken(code);
+            return ResponseEntity.ok("Access Token: " + accessToken);
+        }
+
+
+}
