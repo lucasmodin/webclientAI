@@ -1,5 +1,6 @@
 package webclient.webclientai.controller;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -49,9 +50,19 @@ public class BlizzardAuthController {
     }
 
     @GetMapping("/callback")
-        public ResponseEntity<String> callback(@RequestParam("code") String code) {
+        public ResponseEntity<Void> callback(@RequestParam("code") String code,
+                                               HttpServletResponse response) throws IOException {
             String accessToken = blizzardAuthService.exchangeCodeForToken(code);
-            return ResponseEntity.ok("Access Token: " + accessToken);
+
+            Cookie cookie = new Cookie("access_token", accessToken);
+            cookie.setHttpOnly(true);
+            cookie.setSecure(false); //only because im doing this in local devolopment, and not intending on deploying!
+            cookie.setPath("/");
+            cookie.setMaxAge(86400);
+
+            response.addCookie(cookie);
+            response.sendRedirect("/account");
+            return ResponseEntity.status(302).build();
         }
 
 

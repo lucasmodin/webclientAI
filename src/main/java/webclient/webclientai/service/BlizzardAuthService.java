@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
+import webclient.webclientai.blizzard_dto.AccountDTO;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 @Service
@@ -26,6 +28,8 @@ public class BlizzardAuthService {
     private String tokenUri;
 
     private final WebClient webClient;
+
+    private final String accountInfo = "https://oauth.battle.net/oauth/userinfo";
 
     @Autowired
     public BlizzardAuthService(WebClient.Builder webClient) {
@@ -48,6 +52,21 @@ public class BlizzardAuthService {
                 .block();
         return (String) response.get("access_token");
     }
+
+    public AccountDTO getBlizzardAccount(String accessToken) {
+        Map<String, Object> accountRaw = webClient.get()
+                .uri(accountInfo)
+                .header("Authorization", "Bearer " + accessToken)
+                .retrieve()
+                .bodyToMono(Map.class)
+                .block();
+
+        long accountId = ((Number) accountRaw.get("id")).longValue();
+        String battletag =(String) accountRaw.get("battletag");
+        return new AccountDTO(accountId, battletag, new ArrayList<>());
+    }
+
+
 
 
 }
