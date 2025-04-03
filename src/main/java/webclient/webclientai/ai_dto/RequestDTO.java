@@ -1,7 +1,8 @@
 
-package webclient.webclientai.dto;
+package webclient.webclientai.ai_dto;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import javax.annotation.processing.Generated;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -13,50 +14,50 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "index",
-    "message",
-    "finish_reason"
+    "model",
+    "messages",
+    "temperature"
 })
 @Generated("jsonschema2pojo")
-public class Choice {
+public class RequestDTO {
 
-    @JsonProperty("index")
-    private Integer index;
-    @JsonProperty("message")
-    private Message message;
-    @JsonProperty("finish_reason")
-    private String finishReason;
+    @JsonProperty("model")
+    private String model;
+    @JsonProperty("messages")
+    private List<Message> messages;
+    @JsonProperty("temperature")
+    private Double temperature;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
 
-    @JsonProperty("index")
-    public Integer getIndex() {
-        return index;
+    @JsonProperty("model")
+    public String getModel() {
+        return model;
     }
 
-    @JsonProperty("index")
-    public void setIndex(Integer index) {
-        this.index = index;
+    @JsonProperty("model")
+    public void setModel(String model) {
+        this.model = model;
     }
 
-    @JsonProperty("message")
-    public Message getMessage() {
-        return message;
+    @JsonProperty("messages")
+    public List<Message> getMessages() {
+        return messages;
     }
 
-    @JsonProperty("message")
-    public void setMessage(Message message) {
-        this.message = message;
+    @JsonProperty("messages")
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
     }
 
-    @JsonProperty("finish_reason")
-    public String getFinishReason() {
-        return finishReason;
+    @JsonProperty("temperature")
+    public Double getTemperature() {
+        return temperature;
     }
 
-    @JsonProperty("finish_reason")
-    public void setFinishReason(String finishReason) {
-        this.finishReason = finishReason;
+    @JsonProperty("temperature")
+    public void setTemperature(Double temperature) {
+        this.temperature = temperature;
     }
 
     @JsonAnyGetter

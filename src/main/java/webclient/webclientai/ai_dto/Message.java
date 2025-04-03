@@ -1,5 +1,5 @@
 
-package webclient.webclientai.dto;
+package webclient.webclientai.ai_dto;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

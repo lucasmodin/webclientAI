@@ -5,11 +5,11 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.beans.factory.annotation.Value;
-import webclient.webclientai.dto.Message;
-import webclient.webclientai.dto.RequestDTO;
-import webclient.webclientai.dto.ResponseDTO;
-import webclient.webclientai.dto.Choice;
-import webclient.webclientai.dto.Usage;
+import webclient.webclientai.ai_dto.Message;
+import webclient.webclientai.ai_dto.RequestDTO;
+import webclient.webclientai.ai_dto.ResponseDTO;
+import webclient.webclientai.ai_dto.Choice;
+import webclient.webclientai.ai_dto.Usage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
