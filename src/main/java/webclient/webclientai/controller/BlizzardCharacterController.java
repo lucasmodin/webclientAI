@@ -2,14 +2,12 @@ package webclient.webclientai.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import webclient.webclientai.service.BlizzardAuthService;
 import webclient.webclientai.service.BlizzardCharacterService;
 
 import java.util.Map;
+
 
 @RestController
 public class BlizzardCharacterController {
