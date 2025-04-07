@@ -22,13 +22,13 @@ public class BlizzardService {
         AccountDTO account = blizzardAuthService.getBlizzardAccount(accessToken);
 
         Map<String, Object> characterData = blizzardCharacterService.getCharacters(accessToken);
-        List<CharacterDTO> characters = extractCharacterList(characterData);
+        List<CharacterDTO> characters = extractCharacterList(characterData, accessToken);
 
         account.setCharacters(characters);
         return account;
     }
 
-    private List<CharacterDTO> extractCharacterList(Map<String, Object> characterData) {
+    private List<CharacterDTO> extractCharacterList(Map<String, Object> characterData, String accessToken) {
         List<CharacterDTO> characters = new ArrayList<>();
 
         List<Map<String, Object>> accounts =(List<Map<String, Object>>) characterData.get("wow_accounts");
@@ -50,7 +50,10 @@ public class BlizzardService {
                 String protectedHref = (String) ((Map<String, Object>) charMap.get("protected_character")).get("href");
                 String mediaHref = (String) ((Map<String, Object>) charMap.get("character")).get("href");
 
-                characters.add(new CharacterDTO(name, level, faction, race, characterClass, realm, protectedHref, mediaHref));
+                String realmSlug = (String) ((Map<String, Object>) charMap.get("realm")).get("slug");
+                String imageUrl = blizzardCharacterService.fetchCharacterImage(realmSlug, name, accessToken);
+
+                characters.add(new CharacterDTO(name, level, faction, race, characterClass, realm, protectedHref, imageUrl));
             }
         }
         return characters;
