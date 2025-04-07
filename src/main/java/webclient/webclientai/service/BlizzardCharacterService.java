@@ -37,33 +37,39 @@ public class BlizzardCharacterService {
 
 
     public String fetchCharacterImage(String realmSlug, String characterName, String accessToken) {
+        try {
+            String encodedRealm = URLEncoder.encode(realmSlug.toLowerCase(), StandardCharsets.UTF_8);
+            String encodedName = URLEncoder.encode(characterName.toLowerCase(), StandardCharsets.UTF_8);
 
-    try {
-        Map<String, Object> response = webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .pathSegment("profile", "wow", "character", realmSlug.toLowerCase(), characterName.toLowerCase(), "character-media")
-                        .queryParam("namespace", "profile-eu")
-                        .queryParam("locale", "en-US")
-                        .build())
-                .header("Authorization", "Bearer " + accessToken)
-                .retrieve()
-                .bodyToMono(Map.class)
-                .block();
+            Map<String, Object> response = webClient.get()
+                    .uri(uriBuilder -> uriBuilder
+                            .scheme("https")
+                            .host("eu.api.blizzard.com")
+                            .path("/profile/wow/character/" + encodedRealm + "/" + encodedName + "/character-media")
+                            .queryParam("namespace", "profile-eu")
+                            .queryParam("locale", "en_US")
+                            .build())
+                    .header("Authorization", "Bearer " + accessToken)
+                    .retrieve()
+                    .bodyToMono(Map.class)
+                    .block();
 
-        if (response != null && response.containsKey("assets")) {
-            List<Map<String, Object>> assets = (List<Map<String, Object>>) response.get("assets");
-            for (Map<String, Object> asset : assets) {
-                if ("main".equals(asset.get("key"))) {
-                    return asset.get("value").toString();
+            if (response != null && response.containsKey("assets")) {
+                List<Map<String, Object>> assets = (List<Map<String, Object>>) response.get("assets");
+                for (Map<String, Object> asset : assets) {
+                    if ("avatar".equals(asset.get("key"))) {
+                        return asset.get("value").toString();
+                    }
                 }
             }
+        } catch (WebClientResponseException e) {
+            System.out.println("Image API error: " + e.getRawStatusCode() + " - " + e.getResponseBodyAsString());
         }
-    } catch(WebClientResponseException e) {
-        //in the coincidence that by somehow something is wrong with blizzards rendering
-        return e.getResponseBodyAsString();
-    }
+
+        System.out.println("her kommer ingenting");
         return null;
     }
+
 
 
 

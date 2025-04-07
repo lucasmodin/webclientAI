@@ -51,6 +51,7 @@ public class BlizzardService {
                 String mediaHref = (String) ((Map<String, Object>) charMap.get("character")).get("href");
 
                 String realmSlug = (String) ((Map<String, Object>) charMap.get("realm")).get("slug");
+
                 String imageUrl = blizzardCharacterService.fetchCharacterImage(realmSlug, name, accessToken);
 
                 characters.add(new CharacterDTO(name, level, faction, race, characterClass, realm, protectedHref, imageUrl));

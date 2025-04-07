@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 import webclient.webclientai.service.BlizzardAuthService;
+import webclient.webclientai.service.BlizzardTokenInspector;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -32,6 +33,9 @@ public class BlizzardAuthController {
 
     @Autowired
     private BlizzardAuthService blizzardAuthService;
+
+    @Autowired
+    private BlizzardTokenInspector blizzardTokenInspector;
 
     @GetMapping("/login")
     public void login(HttpServletResponse response) throws IOException {
@@ -55,6 +59,8 @@ public class BlizzardAuthController {
         public ResponseEntity<Void> callback(@RequestParam("code") String code,
                                                HttpServletResponse response) throws IOException {
             String accessToken = blizzardAuthService.exchangeCodeForToken(code);
+
+            blizzardTokenInspector.inspectAccessToken(accessToken);
 
             Cookie cookie = new Cookie("access_token", accessToken);
             cookie.setHttpOnly(true);
