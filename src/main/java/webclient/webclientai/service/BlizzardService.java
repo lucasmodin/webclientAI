@@ -54,7 +54,7 @@ public class BlizzardService {
 
                 String imageUrl = blizzardCharacterService.fetchCharacterImage(realmSlug, name, accessToken);
 
-                characters.add(new CharacterDTO(name, level, faction, race, characterClass, realm, protectedHref, imageUrl));
+                characters.add(new CharacterDTO(name, level, faction, race, characterClass, realm, realmSlug, protectedHref, imageUrl));
             }
         }
         return characters;

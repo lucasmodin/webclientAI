@@ -1,4 +1,4 @@
-package webclient.webclientai.blizzard_dto.ItemDTO;
+package webclient.webclientai.blizzard_dto.Item_dto;
 
 public class SecondaryStatsDTO {
     private Integer crit;

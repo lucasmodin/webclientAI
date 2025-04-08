@@ -7,16 +7,18 @@ public class CharacterDTO {
     private String race;
     private String characterClass;
     private String realm;
+    private String realmSlug;
     private String protectedHref; //for API calls
     private String characterMediaHref; //for implementation of character photos
 
-    public CharacterDTO(String name, int level, String faction, String race, String characterClass, String realm, String protectedHref, String characterMediaHref) {
+    public CharacterDTO(String name, int level, String faction, String race, String characterClass, String realm, String realmSlug, String protectedHref, String characterMediaHref) {
         this.name = name;
         this.level = level;
         this.faction = faction;
         this.race = race;
         this.characterClass = characterClass;
         this.realm = realm;
+        this.realmSlug = realmSlug;
         this.protectedHref = protectedHref;
         this.characterMediaHref = characterMediaHref;
     }
@@ -87,5 +89,13 @@ public class CharacterDTO {
 
     public void setCharacterMediaHref(String characterMediaHref) {
         this.characterMediaHref = characterMediaHref;
+    }
+
+    public String getRealmSlug() {
+        return realmSlug;
+    }
+
+    public void setRealmSlug(String realmSlug) {
+        this.realmSlug = realmSlug;
     }
 }
