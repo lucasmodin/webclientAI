@@ -1,5 +1,6 @@
 package webclient.webclientai.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,9 +17,10 @@ public class RaiderIOController {
     }
 
     @GetMapping("/{region}/{realm}/{name}")
-    public RaiderIOCharacterDTO getCharacterData(@PathVariable String region,
-                                                 @PathVariable String realm,
-                                                 @PathVariable String name) {
-        return raiderIOService.fetchMythicPlusData(region, realm, name);
+    public ResponseEntity<RaiderIOCharacterDTO> getCharacterData(@PathVariable String region,
+                                                                @PathVariable String realm,
+                                                                @PathVariable String name) {
+        RaiderIOCharacterDTO characterData = raiderIOService.fetchMythicPlusData(region, realm, name);
+        return ResponseEntity.ok(characterData);
     }
 }
