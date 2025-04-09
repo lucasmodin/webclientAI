@@ -1,61 +1,49 @@
 package webclient.webclientai.raiderio_dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class MythicPlusRanksDTO {
+    private RankData overall;
 
-    private int overallWorld;
-    private int overallRegion;
-    private int overallRealm;
-    private int classWorld;
-    private int classRegion;
-    private int classRealm;
+    @JsonProperty("class")
+    private RankData classRanks;
 
-    public MythicPlusRanksDTO() {}
+    @JsonProperty("class_dps")
+    private RankData classDps;
 
-    public int getOverallWorld() {
-        return overallWorld;
-    }
+    @JsonProperty("class_healer")
+    private RankData classHealer;
 
-    public void setOverallWorld(int overallWorld) {
-        this.overallWorld = overallWorld;
-    }
+    @JsonProperty("class_tank")
+    private RankData classTank;
 
-    public int getOverallRegion() {
-        return overallRegion;
-    }
+    public RankData getOverall() { return overall; }
+    public void setOverall(RankData overall) { this.overall = overall; }
 
-    public void setOverallRegion(int overallRegion) {
-        this.overallRegion = overallRegion;
-    }
+    public RankData getClassRanks() { return classRanks; }
+    public void setClassRanks(RankData classRanks) { this.classRanks = classRanks; }
 
-    public int getOverallRealm() {
-        return overallRealm;
-    }
+    public RankData getClassDps() { return classDps; }
+    public void setClassDps(RankData classDps) { this.classDps = classDps; }
 
-    public void setOverallRealm(int overallRealm) {
-        this.overallRealm = overallRealm;
-    }
+    public RankData getClassHealer() { return classHealer; }
+    public void setClassHealer(RankData classHealer) { this.classHealer = classHealer; }
 
-    public int getClassWorld() {
-        return classWorld;
-    }
+    public RankData getClassTank() { return classTank; }
+    public void setClassTank(RankData classTank) { this.classTank = classTank; }
 
-    public void setClassWorld(int classWorld) {
-        this.classWorld = classWorld;
-    }
+    public static class RankData {
+        private int world;
+        private int region;
+        private int realm;
 
-    public int getClassRegion() {
-        return classRegion;
-    }
+        public int getWorld() { return world; }
+        public void setWorld(int world) { this.world = world; }
 
-    public void setClassRegion(int classRegion) {
-        this.classRegion = classRegion;
-    }
+        public int getRegion() { return region; }
+        public void setRegion(int region) { this.region = region; }
 
-    public int getClassRealm() {
-        return classRealm;
-    }
-
-    public void setClassRealm(int classRealm) {
-        this.classRealm = classRealm;
+        public int getRealm() { return realm; }
+        public void setRealm(int realm) { this.realm = realm; }
     }
 }
