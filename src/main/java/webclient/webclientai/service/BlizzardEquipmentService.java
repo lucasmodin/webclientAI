@@ -47,7 +47,7 @@ public class BlizzardEquipmentService {
 
             List<EquippedItemDTO> equippedItems = new ArrayList<>();
             for (JsonNode itemNode : response.get("equipped_items")) {
-                EquippedItemDTO equippedItem = parseEquippedItem(itemNode);
+                EquippedItemDTO equippedItem = parseEquippedItem(itemNode, accessToken);
                 equippedItems.add(equippedItem);
             }
 
@@ -56,14 +56,18 @@ public class BlizzardEquipmentService {
     }
 
 
-    private EquippedItemDTO parseEquippedItem(JsonNode itemNode) {
+    private EquippedItemDTO parseEquippedItem(JsonNode itemNode, String accessToken) {
         EquippedItemDTO dto = new EquippedItemDTO();
         dto.setItemId(itemNode.path("item").path("id").asInt());
         dto.setName(itemNode.path("name").asText());
         dto.setSlot(itemNode.path("slot").path("name").asText());
         dto.setQuality(itemNode.path("quality").path("name").asText());
         dto.setItemLevel(itemNode.path("level").path("value").asInt());
-        dto.setMediaUrl(itemNode.path("media").path("key").path("href").asText());
+        //since the first response we get is the call to the render api, we need to call that, and then call the render api
+        String mediaApiUrl = itemNode.path("media").path("key").path("href").asText();
+        String imageUrl = fetchIconFromMediaUrl(mediaApiUrl, accessToken);
+        dto.setMediaUrl(imageUrl);
+
         PrimaryStatsDTO primary = new PrimaryStatsDTO();
         SecondaryStatsDTO secondary = new SecondaryStatsDTO();
         JsonNode statsNode = itemNode.path("stats");
@@ -124,6 +128,31 @@ public class BlizzardEquipmentService {
         }
         return effects;
     }
+
+    //render api helper
+    private String fetchIconFromMediaUrl(String mediaUrl, String accessToken) {
+        try {
+            JsonNode mediaResponse = webClient.get()
+                    .uri(mediaUrl)
+                    .header("Authorization", "Bearer " + accessToken)
+                    .retrieve()
+                    .bodyToMono(JsonNode.class)
+                    .block();
+
+            for(JsonNode asset : mediaResponse.path("assets")) {
+                if("icon".equals(asset.path("key").asText())) {
+                    return asset.path("value").asText();
+                }
+            }
+        } catch(WebClientResponseException e) {
+            System.err.println("Failed to fetch media icon: " + e.getStatusCode() + " -> " + mediaUrl);
+        }
+
+        return ""; //this is a fallback
+    }
+
+
+
 
     //TODO parse set-bonus as they are not a part of "spells" on-equip effect
     //private List<ItemEffectDTO> parseSetBonuses(JsonNode itemNode) {}

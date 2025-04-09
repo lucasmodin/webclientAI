@@ -1,5 +1,6 @@
 package webclient.webclientai.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -48,5 +49,7 @@ public class BlizzardEquipmentController {
         return ResponseEntity.ok(items);
 
     }
+
+
 
 }
