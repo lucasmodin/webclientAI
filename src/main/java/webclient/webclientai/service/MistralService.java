@@ -5,11 +5,9 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.beans.factory.annotation.Value;
-import webclient.webclientai.ai_dto.Message;
-import webclient.webclientai.ai_dto.RequestDTO;
-import webclient.webclientai.ai_dto.ResponseDTO;
-import webclient.webclientai.ai_dto.Choice;
-import webclient.webclientai.ai_dto.Usage;
+import webclient.webclientai.ai_dto.*;
+import webclient.webclientai.blizzard_dto.Item_dto.EquippedItemDTO;
+import webclient.webclientai.raiderio_dto.RaiderIOCharacterDTO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,5 +49,39 @@ public class MistralService {
         map.put("Usage", usg);
         map.put("Choices", lst);
         return map; }
+
+
+
+    public Map<String, Object> promptMistralWithCharacterContext(
+            RaiderIOCharacterDTO character,
+            List<EquippedItemDTO> gear,
+            String userInput
+    ) {
+        String systemPrompt = "You are a helpful assistant and an expert WoW PvE coach.";
+        String combinedPrompt = PromptBuilder.buildPrompt(character, gear) + "\n\nUser's question: " + userInput;
+
+        RequestDTO requestDTO = new RequestDTO();
+        requestDTO.setModel("mistral-small-latest");
+        requestDTO.setTemperature(1.0);
+
+        List<Message> messages = new ArrayList<>();
+        messages.add(new Message("system", systemPrompt));
+        messages.add(new Message("user", combinedPrompt));
+        requestDTO.setMessages(messages);
+
+        ResponseDTO response = webClient.post()
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(h -> h.setBearerAuth(openapikey))
+                .bodyValue(requestDTO)
+                .retrieve()
+                .bodyToMono(ResponseDTO.class)
+                .block();
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("Choices", response.getChoices());
+        map.put("Usage", response.getUsage());
+        return map;
+    }
+
 
 }

@@ -12,6 +12,8 @@ public class MythicPlusRunDTO {
     private long clear_time_ms;
     private long par_time_ms;
 
+    private RaiderIOCharacterSummary character;
+
     public String getDungeon() { return dungeon; }
     public void setDungeon(String dungeon) { this.dungeon = dungeon; }
 
@@ -37,4 +39,12 @@ public class MythicPlusRunDTO {
     public void setPar_time_ms(long par_time_ms) { this.par_time_ms = par_time_ms; }
 
     public boolean isTimed() { return clear_time_ms > 0 && par_time_ms > 0 && clear_time_ms <= par_time_ms; }
+
+    public RaiderIOCharacterSummary getCharacter() {
+        return character;
+    }
+
+    public void setCharacter(RaiderIOCharacterSummary character) {
+        this.character = character;
+    }
 }
