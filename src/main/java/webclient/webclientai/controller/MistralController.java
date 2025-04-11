@@ -60,7 +60,7 @@ public class MistralController {
         Map<String, Object> response =
                 mistralService.promptMistralWithCharacterContext(character, gear, userPromptDTO.getUserMessage());
 
-        // Extract message from response to return to frontend
+        //extracting message from response to return to frontend
         List<Choice> choices = (List<Choice>) response.get("Choices");
         String reply = choices != null && !choices.isEmpty() ? choices.get(0).getMessage().getContent() : "No AI response";
 
