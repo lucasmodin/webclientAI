@@ -42,6 +42,8 @@ public class BlizzardAuthService {
         formData.add("code", code);
         formData.add("redirect_uri", redirectUri);
 
+
+        //form to blizzards API - these are required by blizzard to retrieve the access token
         Map<String, Object> response = webClient.post()
                 .uri(tokenUri)
                 .headers(h -> h.setBasicAuth(clientId, clientSecret))

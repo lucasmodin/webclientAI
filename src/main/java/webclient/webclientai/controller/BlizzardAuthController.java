@@ -5,10 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import webclient.webclientai.service.BlizzardAuthService;
 import webclient.webclientai.service.BlizzardTokenInspector;
@@ -55,6 +52,20 @@ public class BlizzardAuthController {
         System.out.println("Login redirected to " + authUrl);
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletResponse response) {
+        Cookie cookie = new Cookie("access_token", "");
+        cookie.setHttpOnly(true);
+        cookie.setSecure(false);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+
+        response.addCookie(cookie);
+        return ResponseEntity.ok().build();
+    }
+
+
+
     @GetMapping("/callback")
         public ResponseEntity<Void> callback(@RequestParam("code") String code,
                                                HttpServletResponse response) throws IOException {
@@ -70,7 +81,7 @@ public class BlizzardAuthController {
             //cookie.setDomain("localhost"); //test to resolve frontend error
 
             response.addCookie(cookie);
-            response.sendRedirect("/account");
+            response.sendRedirect("http://localhost:3000/account.html");
             return ResponseEntity.status(302).build();
         }
 
