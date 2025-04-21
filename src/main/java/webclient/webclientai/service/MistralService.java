@@ -9,10 +9,7 @@ import webclient.webclientai.ai_dto.*;
 import webclient.webclientai.blizzard_dto.Item_dto.EquippedItemDTO;
 import webclient.webclientai.raiderio_dto.RaiderIOCharacterDTO;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class MistralService {
@@ -55,14 +52,21 @@ public class MistralService {
     public Map<String, Object> promptMistralWithCharacterContext(
             RaiderIOCharacterDTO character,
             List<EquippedItemDTO> gear,
-            String userInput
+            String userInput,
+            PromptContext context
     ) {
         String systemPrompt = "You are a helpful assistant and an expert WoW PvE coach.";
-        String combinedPrompt = PromptBuilder.buildPrompt(character, gear) + "\n\nUser's question: " + userInput;
+        String combinedPrompt = PromptBuilder.buildPromptWithContext(context, character, gear, userInput);
+
+        //debugging
+        System.out.println("=== Mistral Prompt Sent ===");
+        System.out.println(combinedPrompt);
+        System.out.println("===========================");
 
         RequestDTO requestDTO = new RequestDTO();
         requestDTO.setModel("mistral-small-latest");
         requestDTO.setTemperature(1.0);
+
 
         List<Message> messages = new ArrayList<>();
         messages.add(new Message("system", systemPrompt));
@@ -81,6 +85,13 @@ public class MistralService {
         map.put("Choices", response.getChoices());
         map.put("Usage", response.getUsage());
         return map;
+    }
+
+    public PromptContext detectContextFromMessage(String userInput) {
+        userInput = userInput.toLowerCase();
+        if(userInput.contains("gear") || userInput.contains("ilvl")) return PromptContext.GEAR_ONLY;
+        if(userInput.contains("mythic") || userInput.contains("rio") || userInput.contains("m+")) return PromptContext.MYTHIC_PLUS_ANALYSIS;
+        return PromptContext.GENERAL_CHARACTER_OVERVIEW;
     }
 
 

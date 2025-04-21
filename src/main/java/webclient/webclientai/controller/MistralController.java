@@ -5,12 +5,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import webclient.webclientai.ai_dto.Choice;
+import webclient.webclientai.ai_dto.PromptContext;
 import webclient.webclientai.ai_dto.UserPromptDTO;
 import webclient.webclientai.blizzard_dto.Item_dto.EquippedItemDTO;
 import webclient.webclientai.raiderio_dto.RaiderIOCharacterDTO;
 import webclient.webclientai.service.BlizzardEquipmentService;
 import webclient.webclientai.service.MistralService;
 import webclient.webclientai.service.RaiderIOService;
+
 
 import java.util.HashMap;
 import java.util.List;
@@ -57,8 +59,10 @@ public class MistralController {
             return ResponseEntity.badRequest().body("Missing character data or gear.");
         }
 
+        PromptContext context = mistralService.detectContextFromMessage(userPromptDTO.getUserMessage());
+
         Map<String, Object> response =
-                mistralService.promptMistralWithCharacterContext(character, gear, userPromptDTO.getUserMessage());
+                mistralService.promptMistralWithCharacterContext(character, gear, userPromptDTO.getUserMessage(), context);
 
         //extracting message from response to return to frontend
         List<Choice> choices = (List<Choice>) response.get("Choices");

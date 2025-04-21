@@ -81,6 +81,8 @@ public class PromptBuilder {
 
     public static String buildGearOnly(List<EquippedItemDTO> gear) {
         StringBuilder sb = new StringBuilder();
+
+
         sb.append("Equipped Gear:\n\n");
 
         for (EquippedItemDTO item : gear) {
@@ -173,6 +175,19 @@ public class PromptBuilder {
 
 
 
+    public static String buildPromptWithContext(
+            PromptContext promptContext,
+            RaiderIOCharacterDTO character,
+            List<EquippedItemDTO> gear,
+            String userInput
+    ) {
+        String basePrompt = switch (promptContext) {
+            case GEAR_ONLY -> buildGearOnly(gear);
+            case MYTHIC_PLUS_ANALYSIS -> buildMythicPlusPrompt(character, gear);
+            case GENERAL_CHARACTER_OVERVIEW -> buildGeneralPrompt(character, gear);
+        };
+        return basePrompt + "\n\nUser's question: " + userInput;
+    }
 
 
 
