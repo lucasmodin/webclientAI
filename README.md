@@ -23,7 +23,7 @@ The application retrieves the user’s characters, gear and Mythic+ scores, and 
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/USERNAME/webclientAI.git
+   git clone https://github.com/lucasmodin/webclientAI.git
    cd webclientAI
    ```
 2. Add your credentials in application.properties:
