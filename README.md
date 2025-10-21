@@ -20,6 +20,9 @@ The application retrieves the user’s characters, gear and Mythic+ scores, and 
 - **Database (optional):** H2 / MySQL  
 
 ## Setup
+Before you start, you need to create a 'client' on the battle.net developer portal to access the Blizzard OAuth API and get your client id:
+[https://develop.battle.net/access/](https://develop.battle.net/access/)
+
 
 1. Clone the repository:
    ```bash
